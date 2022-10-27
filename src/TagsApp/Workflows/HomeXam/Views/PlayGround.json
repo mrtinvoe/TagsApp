@@ -1,0 +1,40 @@
+[
+  {
+    "component": "Window",
+    "name": "wndDashboard",
+    "version": "dashboard",
+    "environment": "Xamarin",
+    "type": "fixed",
+    "title": "Tagy",
+    "description": "",
+    "icon": "fa fa-house",
+    "children": [
+      {
+        "component": "FieldSet",
+        "name": "flsRow1",
+        "formType": "vertical"
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsRow2",
+        "formType": "vertical"
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsRow3",
+        "formType": "vertical"
+      }
+    ],
+
+    "windowActions": [
+      {
+        "component": "Button",
+        "label": "Zavřít",
+        "name": "closeBtn",
+        "icon": "glyphicon glyphicon-remove",
+        "size": "icon",
+        "shortcut": "alt+q"
+      }
+    ]
+  }
+]

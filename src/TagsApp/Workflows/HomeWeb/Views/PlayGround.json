@@ -1,0 +1,40 @@
+[
+  {
+    "component": "Window",
+    "name": "wndPlayground",
+    "version": "playground",
+    "environment": "LightBlue",
+    "type": "fixed",
+    "title": "Tagy",
+    "description": "",
+    "icon": "fa fa-house",
+    "children": [
+      {
+        "component": "FieldSet",
+        "name": "flsRow1",
+        "height": 300
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsRow2",
+        "height": 300
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsRow3",
+        "height": 300
+      }
+    ],
+
+    "windowActions": [
+      {
+        "component": "Button",
+        "label": "Zavřít",
+        "name": "closeBtn",
+        "icon": "glyphicon glyphicon-remove",
+        "size": "icon",
+        "shortcut": "alt+q"
+      }
+    ]
+  }
+]
