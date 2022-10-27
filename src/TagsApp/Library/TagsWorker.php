@@ -25,25 +25,6 @@ class TagsWorker{
             private ResponseEventsAccessor $responseEventsAccessor,
         ){}
 
-        public function listen(int $tagId): void{
-            $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $tagId])), function (TagLive $tagLive) {
-                errlog($tagLive->getValue());
-            });
-        }
-
-        public function makeTurn(int $tagId, string $character, \WBoX\Components\Button $button): void{
-
-            $tagWriter = new TagWriter($this->sharedMemoryAccessor);
-
-            $tagWriter->writeTag($tagId, $character);
-            $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $tagId])), function (TagLive $tagLive) use ($button) {
-                if(!empty($tagLive)){
-                    $button->setDisabled();
-                    $button->setLabel($tagLive->getValue());
-                }
-            });
-        }
-
         public function buildPlayground(string $character): void{
 
             for($i = 1; $i<=9; $i++){
@@ -69,27 +50,34 @@ class TagsWorker{
                 $btn->setWidth(100);
 
                 $this->controllerAccessoryAccessor->get()->addControllerComponent($btn);
-                $btn->onButtonPressedEvent(function() use ($i, $character){
-                    $tagWriter = new TagWriter($this->sharedMemoryAccessor);
-                    $tagWriter->writeTag($this->tagsArr[$i-1], $character);
-                });
+
+                $btn->onButtonPressedEvent(
+                    function() use($i, $character){
+                        $this->makeTurn($this->tagsArr[$i-1], $character);
+                    }
+                );
 
                 $btn->setLabel(" ");
 
-                $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $this->tagsArr[$i-1]])), function (TagLive $tagLive) use ($btn) {
-                    if(!empty($tagLive->getValue())){
-                        if($tagLive->getValue() == "❌" || $tagLive->getValue() == "⭕"){
-                            errlog("ma to hodnotu".$tagLive->getValue());
-                            $btn->setLabel($tagLive->getValue());
-                            $btn->setDisabled();
-                        }
-                    }
-
-                });
+                $this->makeRecord($this->tagsArr[$i-1], $btn);
             }
-    }
-
-        public function getGameTags(): array{
-            return $this->tagsArr;
         }
+
+        private function makeTurn(int $tagId, $character): void{
+            $tagWriter = new TagWriter($this->sharedMemoryAccessor);
+            $tagWriter->writeTag($tagId, $character);
+        }
+
+        private function makeRecord(int $tagId, $button): void{
+            $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $tagId])), function (TagLive $tagLive) use ($button) {
+                if(!empty($tagLive->getValue())){
+                    if($tagLive->getValue() == "❌" || $tagLive->getValue() == "⭕"){
+                        $button->setLabel($tagLive->getValue());
+                        $button->setDisabled();
+                    }
+                }
+
+            });
+        }
+
     }
