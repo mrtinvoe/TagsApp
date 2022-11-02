@@ -56,13 +56,15 @@ class PlayGround extends ViewController
 
 
 
-    private int $val;
+    private int $val = 0;
 
     private TagsWorker $tagsWorker;
 
     private array $tagsArr = [
         460, 461, 462, 463, 464, 465, 466, 467, 468
     ];
+
+    private array $buttons;
 
 
 
@@ -73,24 +75,23 @@ class PlayGround extends ViewController
         private SharedMemoryAccessor $sharedMemoryAccessor,
         private SystemMessagingAccessor $systemMessagingAccessor,
         private ResponseEventsAccessor $responseEventsAccessor,
-        //private TagsWorker $tagsWorker,
     ){}
 
     public function init()
     {
-
+        $this->tagsWorker = new TagsWorker($this->entityManagerFactory, $this->controllerAccessoryAccessor, $this->sharedMemoryAccessor, $this->systemMessagingAccessor, $this->responseEventsAccessor);
     }
 
     public function indexAction()
     {
-        $tagsWorker = new TagsWorker($this->entityManagerFactory, $this->controllerAccessoryAccessor, $this->sharedMemoryAccessor, $this->systemMessagingAccessor, $this->responseEventsAccessor);
-        $tagsWorker->buildPlayground("⭕");
+        $this->buildPlayGround();
     }
 
     private function buildPlayGround(){
 
         for($i = 1; $i<=9; $i++){
             $btn = new \WBoX\Components\LightBlue\Button($this->systemMessagingAccessor, $this->responseEventsAccessor,$this->controllerAccessoryAccessor);
+
             if($i <= 3){
                 $btn->setParent('flsRow1');
             }
@@ -102,35 +103,66 @@ class PlayGround extends ViewController
                     $btn->setParent('flsRow3');
                 }
             }
-            $btn->setName("btn1".$i);
+
+            $btn->setName("btn".$i);
             $btn->setHeight(100);
             $btn->setWidth(100);
+
+
             $this->controllerAccessoryAccessor->get()->addControllerComponent($btn);
+            $this->buttons[] = $btn;
 
-            $btn->onButtonPressedEvent(function() use ($i){
-                $tagWriter = new TagWriter($this->sharedMemoryAccessor);
-                $tagWriter->writeTag($this->tagsArr[$i-1], "⭕");
-            });
-
+            $btn->onButtonPressedEvent(
+                function() use($btn, $i){
+                    $this->tagsWorker->makeTurn($this->tagsArr[$i-1], "⭕");
+                }
+            );
             $btn->setLabel(" ");
 
-            $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $this->tagsArr[$i-1]])), function (TagLive $tagLive) use ($btn) {
-                if(!empty($tagLive->getValue())){
-                    if($tagLive->getValue() == "❌" || $tagLive->getValue() == "⭕"){
-                        errlog("ma to hodnotu".$tagLive->getValue());
-                        $btn->setLabel($tagLive->getValue());
-                        $btn->setDisabled();
+            $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $this->tagsArr[$i-1]])),
+                function (TagLive $tagLive) use ($btn) {
+                    if(!empty($tagLive->getValue())){
+                        if($tagLive->getValue() == "⭕" || $tagLive->getValue() == "❌"){
+                            $btn->setLabel($tagLive->getValue());
+                            $btn->setDisabled();
+
+                            if($tagLive->getValue() == "⭕") $this->tagsWorker->setState(2);
+                            if($tagLive->getValue() == "❌") $this->tagsWorker->setState(1);
+                            errlog("state: ".$this->tagsWorker->getState());
+
+
+                        }
                     }
+                });
+        }
 
-                }
+        $i = 0;
+        foreach($this->buttons as $button){
+            if($button instanceof \WBoX\Components\LightBlue\Button){
+                $i++;
 
+                $this->controllerAccessoryAccessor->get()->registerTableUpdate((new TagsLive($this->entityManagerFactory, ['tag' => $this->tagsArr[$i-1]])),
+                    function (TagLive $tagLive) use ($button) {
+                        if(!empty($tagLive->getValue())){
+                            if($this->tagsWorker->getState() == 2){
+                                foreach ($this->buttons as $btn){
+                                    $btn->setDisabled();
+                                }
+                            }
+                            if($this->tagsWorker->getState() == 1){
+                                foreach ($this->buttons as $btn){
+                                    if($btn->label == " ")
+                                    $btn->setDisabled(false);
+                                }
+                            }
+                        }
+                    });
+            }
 
-            });
 
         }
 
     }
-
 
     private function closeWindow(): void
     {
@@ -138,18 +170,3 @@ class PlayGround extends ViewController
         $this->controllerAccessoryAccessor->get()->closeWorkflow();
     }
 }
-/*$this->btnChangeTag->onButtonPressedEvent(function(){
-           $tagWriter = new TagWriter($this->sharedMemoryAccessor);
-
-           if(empty($this->val)){
-               $this->val = 1;
-           }
-           else{
-               if($this->val == 1) $this->val = 2;
-               else $this->val = 0;
-           }
-
-
-           $tagWriter->writeTag(460, $this->val);
-           errlog("Zapsána".$this->val." do tagu 460");
-       });*/
