@@ -1,0 +1,94 @@
+[
+  {
+    "component": "Window",
+    "name": "wndTestWf",
+    "version": "test",
+    "environment": "LightBlue",
+    "type": "modal",
+    "title": "okenko :)",
+    "description": "okno",
+    "icon": "fa fa-edit",
+    "children": [
+      {
+        "component": "Label",
+        "name": "lblTest"
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsListView",
+        "label": "list view",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "ListView",
+            "name": "lstListView",
+            "showHeader": true,
+            "headers": [
+              {
+                "name": "id",
+                "rowIndex": true,
+                "text": "ID",
+                "dataType": "string",
+                "width": "20%",
+                "hidden": false
+              },
+              {
+                "name": "zneni",
+                "text": "Zneni otazky",
+                "dataType": "string",
+                "width": "40%",
+                "hidden": false
+              },
+              {
+                "name": "typ",
+                "text": "typ otazky",
+                "dataType": "string",
+                "width": "40%",
+                "hidden": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsListTable",
+        "label": "list table",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "ListTable",
+            "name": "lstListTable",
+            "entity": "Tester::Users",
+            "searchingEnabled": true,
+            "sortingEnabled": true
+          }
+        ]
+      }
+
+    ],
+    "windowActions": [
+      {
+        "component": "Button",
+        "label": "Zavřít",
+        "name": "closeBtn",
+        "icon": "glyphicon glyphicon-remove",
+        "size": "icon",
+        "shortcut": "esc"
+      }
+    ],
+    "formActions": [
+      {
+        "component": "Button",
+        "label": "Uložit",
+        "name": "saveBtn",
+        "icon": "fa fa-floppy-o",
+        "shortcut": "return"
+      }
+    ]
+  }
+]

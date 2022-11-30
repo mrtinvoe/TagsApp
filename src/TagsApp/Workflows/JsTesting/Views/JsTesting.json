@@ -1,0 +1,168 @@
+[
+  {
+    "component": "Window",
+    "name": "wndTest",
+    "version": "test",
+    "environment": "LightBlue",
+    "type": "fixed",
+    "title": "okenko :)",
+    "description": "okno",
+    "icon": "fa fa-edit",
+    "children": [
+      {
+        "component": "FieldSet",
+        "name": "flsCmb",
+        "label": "checkbox",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "ComboBox",
+            "name": "cmbUser",
+            "label": "Vyberte"
+          },
+          {
+            "component": "EditBox",
+            "name": "txtName",
+            "label": "Test"
+          },
+          {
+            "component": "CheckBox",
+            "name": "switcheryCheckBox",
+            "label": "Switchery",
+            "description": "test",
+            "type": "switchery"
+          },
+          {
+            "component": "CheckBox",
+            "name": "circleCheckBox",
+            "label": "circle",
+            "description": "test",
+            "color": "primary",
+            "type": "circle"
+          },
+          {
+            "component": "CheckBox",
+            "name": "defaultCheckBox",
+            "label": "#default",
+            "description": "test",
+            "type": "default"
+          },
+          {
+            "component": "CheckBox",
+            "name": "checkBox",
+            "label": "default",
+            "color": "success",
+            "description": "neni zadan typ"
+          }
+        ]
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsSelect",
+        "label": "select",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "Select",
+            "name": "selectUser",
+            "label": "test",
+            "description": "jen tu neco zkousim :)",
+            "placeholder": "zacnete psat neco"
+          }
+        ]
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsShortcuts",
+        "label": "shortcuts",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "Button",
+            "name": "btnTest",
+            "label": "##test",
+            "shortcut": "q"
+          }
+        ]
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsListView",
+        "label": "list view",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "ListView",
+            "name": "lstListView",
+            "showHeader": true,
+            "headers": [
+              {
+                "name": "id",
+                "rowIndex": true,
+                "text": "ID",
+                "dataType": "string",
+                "width": "20%",
+                "hidden": false
+              },
+              {
+                "name": "zneni",
+                "text": "Zneni otazky",
+                "dataType": "string",
+                "width": "40%",
+                "hidden": false
+              },
+              {
+                "name": "typ",
+                "text": "typ otazky",
+                "dataType": "string",
+                "width": "40%",
+                "hidden": false
+              }
+            ],
+            "actions": [
+              {
+                "name": "edit",
+                "icon": "pencil",
+                "color": "primary"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "FieldSet",
+        "name": "flsListTable",
+        "label": "list table",
+        "collapsible": true,
+        "collapsed": false,
+        "height": 300,
+        "children": [
+          {
+            "component": "ListTable",
+            "name": "lstListTable",
+            "entity": "Tester::Users",
+            "searchingEnabled": true,
+            "sortingEnabled": true
+          }
+        ]
+      }
+    ],
+    "formActions": [
+      {
+        "component": "Button",
+        "label": "Uložit",
+        "name": "saveBtn",
+        "icon": "fa fa-floppy-o",
+        "shortcut": "return"
+      }
+    ]
+  }
+]
